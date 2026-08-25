@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SustainHub - SDG Sprints</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="./css/style.css" rel="stylesheet" type="text/css" />
+</head>
+
+<!-- flex + min-vh-100 = footer stays down -->
+
+<body class="d-flex flex-column min-vh-100">
+
+    <nav class="navbar">
+        <div class="container">
+            <a href="#">SustainHub</a>
+            <div id="sdgNav">
+                <ul>
+                    <li class="nav-item"><a class="nav-link active" href="#">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">SDG Targets</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">Action Hub</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container my-5">
+
+        <!-- lg: 5 + 7 cols. mobile gets stacked -->
+        <div class="row align-items-center g-4" id="targets">
+
+            <div class="col-12 col-lg-5">
+                <h1>Support SDG Goal 13: Climate Action</h1>
+                <p class="lead">Our planet is facing unprecedented environmental challenges. Join the SustainHub
+                    community sprint to develop software integrations that track local emissions, organize dynamic
+                    community-led restoration events, and shut down dark patterns in greenwashed marketing pipelines.
+                </p>
+
+                <div class="my-3">
+                    <a href="#solutions" class="btn btn-primary btn-lg">Join</a>
+                    <a href="#targets" class="btn btn-outline-secondary btn-lg">See targets</a>
+                </div>
+            </div>
+
+            <div class="col-12 col-lg-7">
+                <!-- carousel, 3 UN targets -->
+                <div id="targetCarousel" class="carousel slide" data-bs-ride="carousel">
+                    <div class="carousel-indicators">
+                        <button type="button" data-bs-target="#targetCarousel" data-bs-slide-to="0"
+                            class="active"></button>
+                        <button type="button" data-bs-target="#targetCarousel" data-bs-slide-to="1"></button>
+                        <button type="button" data-bs-target="#targetCarousel" data-bs-slide-to="2"></button>
+                    </div>
+
+                    <div class="carousel-inner">
+                        <div class="carousel-item active">
+                            <div class="sdg-hero-banner">
+                                <h3>Target 13.1</h3>
+                                <p class="mb-0">Strengthen resilience and adaptive capacity to climate-related hazards
+                                    and natural disasters in all countries.</p>
+                            </div>
+                        </div>
+                        <div class="carousel-item">
+                            <div class="sdg-hero-banner">
+                                <h3>Target 13.2</h3>
+                                <p class="mb-0">Integrate climate change measures into national policies, strategies and
+                                    planning.</p>
+                            </div>
+                        </div>
+                        <div class="carousel-item">
+                            <div class="sdg-hero-banner">
+                                <h3>Target 13.3</h3>
+                                <p class="mb-0">Improve education, awareness-raising and institutional capacity on
+                                    climate change mitigation, adaptation and early warning.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button class="carousel-control-prev" type="button" data-bs-target="#targetCarousel"
+                        data-bs-slide="prev">
+                        <span class="carousel-control-prev-icon"></span>
+                    </button>
+                    <button class="carousel-control-next" type="button" data-bs-target="#targetCarousel"
+                        data-bs-slide="next">
+                        <span class="carousel-control-next-icon"></span>
+                    </button>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- cards sizes 12 -> 6 -> 4 -->
+        <h2 class="my-5 text-center" id="solutions">Community Solutions</h2>
+        <div class="row g-4">
+
+            <div class="col-12 col-md-6 col-lg-4">
+                <div class="card h-100">
+                    <div class="card-body d-flex flex-column">
+                        <h5 class="card-title">Forest Restoration</h5>
+                        <p class="card-text">Organize tree planting drives and analyze canopy coverage metrics
+                            dynamically using public satellite datasets.</p>
+                        <a href="#" class="btn btn-success mt-auto align-self-start">Join</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-12 col-md-6 col-lg-4">
+                <div class="card h-100">
+                    <div class="card-body d-flex flex-column">
+                        <h5 class="card-title">Energy Trackers</h5>
+                        <p class="card-text">Develop software dashboards for businesses to log real-time energy
+                            expenditures and locate carbon bottlenecks.</p>
+                        <a href="#" class="btn btn-warning mt-auto align-self-start">Need devs</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-12 col-md-6 col-lg-4">
+                <div class="card h-100">
+                    <div class="card-body d-flex flex-column">
+                        <h5 class="card-title">Ocean Cleanups</h5>
+                        <p class="card-text">Map localized plastic deposition vectors and coordinate volunteer cleanup
+                            deployments on regional shorelines.</p>
+                        <a href="#" class="btn btn-danger mt-auto align-self-start">Urgent</a>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <h2 class="my-5 text-center">Component Demos</h2>
+        <div class="row g-4">
+
+            <div class="col-12 col-md-6 col-lg-4">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h5 class="card-title">Loading buttons</h5>
+                        <p class="card-text">For when a form is sending. Tells you the click worked and blocks a double
+                            submit.</p>
+                        <button class="btn btn-primary" type="button" disabled>
+                            <span class="spinner-border spinner-border-sm"></span>
+                            Loading...
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-12 col-md-6 col-lg-4">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h5 class="card-title">Navbar with search</h5>
+                        <p class="card-text">Search box lives inside the navbar. On mobile it hides behind the burger
+                            with the links.</p>
+
+                        <!-- mini navbar, own toggler id -->
+                        <nav class="navbar navbar-expand-sm navbar-dark bg-dark rounded px-2">
+                            <div class="container-fluid">
+                                <a class="navbar-brand" href="#">Demo</a>
+                                <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                                    data-bs-target="#demoNav">
+                                    <span class="navbar-toggler-icon"></span>
+                                </button>
+                                <div class="collapse navbar-collapse" id="demoNav">
+                                    <ul class="navbar-nav me-auto">
+                                        <li class="nav-item"><a class="nav-link active" href="#">Home</a></li>
+                                    </ul>
+                                    <form class="d-flex">
+                                        <input class="form-control form-control-sm me-2" type="search"
+                                            placeholder="Search">
+                                        <button class="btn btn-sm btn-outline-light" type="submit">Go</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-12 col-md-6 col-lg-4">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h5 class="card-title">Sticky footer</h5>
+                        <p class="card-text">The footer down there sticks to the bottom when the page is short, and
+                            moves down when it is long.</p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </main>
+
+    <footer class="mt-auto py-3 bg-dark text-white-50">
+        <div class="container text-center">
+            SustainHub &middot; SDG 13
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>

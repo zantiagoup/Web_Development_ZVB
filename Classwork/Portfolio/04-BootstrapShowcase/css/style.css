@@ -1,0 +1,17 @@
+body {
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    background-color: #f8f9fa;
+}
+.sdg-hero-banner {
+    background-color: #1a1a1a;
+    color: #ffffff;
+    padding: 40px 20px;
+    border-radius: 8px;
+    margin-bottom: 30px;
+}
+/* same height so it dont jump */
+.carousel-item .sdg-hero-banner {
+    min-height: 220px;
+    padding: 40px 60px 60px;
+    margin-bottom: 0;
+}

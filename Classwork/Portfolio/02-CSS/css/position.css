@@ -1,0 +1,35 @@
+body {
+    margin: 0;
+}
+
+/* without this the p margins leak out and move the boxes */
+p {
+    margin: 0;
+}
+
+.div1,
+.div2,
+.div3 {
+    position: relative;
+    width: 200px;
+    height: 200px;
+}
+
+/* red starts at the top, it goes to the bottom right corner */
+.div1 {
+    background-color: red;
+    left: 400px;
+    top: 400px;
+}
+
+/* blue stays in the middle, it only moves to the right */
+.div2 {
+    background-color: blue;
+    left: 200px;
+}
+
+/* yellow starts at 400px down, it goes all the way up to the left */
+.div3 {
+    background-color: yellow;
+    top: -400px;
+}

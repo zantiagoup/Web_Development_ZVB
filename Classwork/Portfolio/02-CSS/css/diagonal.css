@@ -1,0 +1,29 @@
+body {
+    margin: 0;
+}
+
+.div1,
+.div2,
+.div3 {
+    width: 200px;
+    height: 200px;
+}
+
+.div1 {
+    background-color: lightcoral;
+    border: 10px solid black;
+    padding: 20px;
+}
+
+.div2 {
+    background-color: lightblue;
+    border: 20px solid black;
+    margin-left: 260px;
+}
+
+/* start at   260 + 240 so 500*/
+.div3 {
+    background-color: lightgreen;
+    border: 10px solid black;
+    margin-left: 500px;
+}

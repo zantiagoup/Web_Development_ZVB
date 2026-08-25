@@ -1,0 +1,38 @@
+body {
+    margin: 0;
+}
+
+/* 600px wide, so the floating blocks wrap into the grid below */
+.art {
+    width: 600px;
+    overflow: hidden;
+}
+
+.red,
+.white1,
+.blue,
+.yellow,
+.white2,
+.white3 {
+    /* border-box keeps every block exactly 200px, border included */
+    box-sizing: border-box;
+    float: left;
+    width: 200px;
+    height: 200px;
+    border: 5px solid black;
+    background-color: white;
+}
+
+.red {
+    width: 400px;
+    height: 400px;
+    background-color: #D40000;
+}
+
+.blue {
+    background-color: #0044A8;
+}
+
+.yellow {
+    background-color: #FFDE00;
+}
