@@ -7,34 +7,7 @@ const operationSelect = document.getElementById('operation');
 const calculateBtn = document.getElementById('calculate-btn');
 const resultStatus = document.getElementById('result-status');
 
-// ==========================================
-// 2. TODO: BASIC CALLBACK MATH FUNCTIONS (Students write these)
-// ==========================================
 
-// TODO: Write "add" callback expression (a, b) => ...
-const add = (a, b) => {
-    return a + b;
-};
-
-// TODO: Write "subtract" callback expression (a, b) => ...
-const subtract = (a, b) => {
-    return a - b;
-};
-
-// TODO: Write "multiply" callback expression (a, b) => ...
-const multiply = (a, b) => {
-    return a * b;
-};
-
-// TODO: Write "divide" callback expression (a, b) => ...
-// Rule: Guard against division-by-zero! Return an Error or string warning.
-const divide = (a, b) => {
-    //sanity check
-    if (b === 0) {
-        return 'Error: cant divide by zero';
-    }
-    return a / b;
-};
 
 
 // ==========================================
@@ -47,60 +20,60 @@ const divide = (a, b) => {
 //   - Is numA and numB actually valid numbers?
 //   - Is callback actually a function?
 // Execution: Returns callback(numA, numB)
-
-
 const calculate = (numA, numB, callbackFunction) => {
+    //sanity
     if (isNaN(numA) || isNaN(numB)) {
-        return 'Error: invalid numbers';
+        throw new Error('Invalid numbers');
     }
     if (typeof callbackFunction !== 'function') {
-        return 'Error: invalid called function';
+        throw new Error('Invalid callback function');
     }
+
     return callbackFunction(numA, numB);
 };
+
 
 
 // ==========================================
 // 4. TODO: EVENT OBSERVER & INTEGRATION WIRING (Students write this)
 // ==========================================
 calculateBtn.addEventListener('click', () => {
-    // alert('Hello there!'); -- no need no more
+    try {
+        // TODO: Extract values from the inputs and parse them as floats.
+        const number1 = parseFloat(num1Input.value);
+        const number2 = parseFloat(num2Input.value);
 
-    // TODO: Extract values from the inputs and parse them as floats.
-    const number1 = parseFloat(num1Input.value);
-    const number2 = parseFloat(num2Input.value);
+        // TODO: Retrieve the selected operation string value.
+        //input sanity
+        const operation = operationSelect.value;
 
-    // TODO: Retrieve the selected operation string value.
-    const operation = operationSelect.value;
+        if (num1Input.value === '' || num2Input.value === '') {
+            throw new Error('Introduce a number');
+        }
+        if (!operation) {
+            throw new Error('You must select an option');
+        }
 
-    // TODO: Match the selected operation string to its corresponding function reference.
-    let callbackFunction;
-    switch (operation) {
-        case 'add':
-            callbackFunction = add;
-            break;
-        case 'subtract':
-            callbackFunction = subtract;
-            break;
-        case 'multiply':
-            callbackFunction = multiply;
-            break;
-        case 'divide':
-            callbackFunction = divide;
-            break;
-        default:
-            callbackFunction = undefined;
+        // TODO: Match the selected operation string to its corresponding function reference.
+        let callbackFunction;
+        switch (operation) {
+            case 'add': callbackFunction = add; break;
+            case 'subtract': callbackFunction = subtract; break;
+            case 'multiply': callbackFunction = multiply; break;
+            case 'divide': callbackFunction = divide; break;
+            default: throw new Error('Invalid selection');
+        }
+
+        // TODO: Execute the higher-order 'calculator' function with input values and the matched function reference.
+        const result = calculate(number1, number2, callbackFunction);
+
+        // TODO: Update resultStatus text, toggling classes (e.g., alert-success vs alert-danger) based on outcomes!
+        resultStatus.textContent = `Result: ${result}`;
+        resultStatus.className = 'alert alert-success';
+    } catch (error) {
+        resultStatus.textContent = error.message;
+        resultStatus.className = 'alert alert-danger';
     }
-
-    // TODO: Execute the higher-order 'calculator' function with input values and the matched function reference.
-    const result = calculate(number1, number2, callbackFunction);
-
-    // A string coming back means something went wrong (our guards return text).
-    const isError = typeof result === 'string';
-
-    // TODO: Update resultStatus text, toggling classes (e.g., alert-success vs alert-danger) based on outcomes!
-    resultStatus.textContent = result;
-    resultStatus.className = isError
-        ? 'alert alert-danger' //false
-        : 'alert alert-success'; //true 
 });
+
+console.log(add(3, 2));
