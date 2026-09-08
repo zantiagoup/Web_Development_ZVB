@@ -88,7 +88,7 @@ actionForm.addEventListener('submit', (e) => {
 
     //reset form
     actionInput.value = "";
-    priority.prioritySelect.value = "";
+    prioritySelect.value = "";
 
     //update the STATE COUNTER
     updateCounter();
@@ -150,8 +150,25 @@ actionList.addEventListener('click', (e) => {
 // ==========================================
 saveBtn.addEventListener('click', () => {
     // 1. Target all dynamically spawned list item nodes inside the DOM
+    const actionCards = actionList.querySelectorAll('li');
+    const exportData = [];
 
     // 2. Loop through active elements and scrape current UI state into an array
+    actionCards.forEach((card) => {
+        const titleElement = card.querySelector('.card-title');
+        const priorityElement = card.querySelector('.badge');
+        const isCompleted = card.classList.contains('completed');
+
+        if (!titleElement) return;
+
+        exportData.push({
+            title: titleElement.textContent.trim(),
+            priority: priorityElement.textContent.trim(),
+            completed: isCompleted
+        });
+    });
+
+    console.log(exportData);
 
     // 3. Defensive Check: Prevent exporting blank structures
 
@@ -175,7 +192,7 @@ saveBtn.addEventListener('click', () => {
 
 // Click load button to programmatically trigger hidden local system explorer
 loadBtn.addEventListener('click', () => {
-    
+
 });
 
 // Handle local file selection event
@@ -187,8 +204,8 @@ fileInput.addEventListener('change', (event) => {
     const reader = new FileReader();
 
     // Define asynchronous execution callback once the file stream buffer finishes reading
-    reader.onload = function(e) {
-        try {    
+    reader.onload = function (e) {
+        try {
             // Parse raw text into structured JSON array
 
             // Defensive Validation: Is this actually a valid array?

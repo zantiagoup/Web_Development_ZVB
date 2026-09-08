@@ -347,3 +347,35 @@ Where the code lives: [`Classwork/Portfolio/05-JS/js/society.js`](Portfolio/05-J
 - Verified in headless Chrome with 20 individuals and 3 sad: all 20 stay inside the 800x600 canvas after 5 seconds (~370 frames), the counters read `Happy: 18 / Sad: 2`, and a sad face did flip to happy during the run.
 
 ---
+
+## Sync check against the professor's repo
+
+**Date:** 2026-09-08 · **Tool:** Claude (Claude Code, Sonnet 5)
+
+### Prompt
+
+```text
+Verifica todos los cambios que sube a Profes ur repo y hazle merge a todos mis
+archivos que yo tengo en mi classwork. Se supone que mi classwork debe de
+estar actualizado con lo que el profesor subió a su repo.
+```
+
+Follow-up, after being asked for the professor's repo URL:
+
+```text
+esta en el folder 2027-1
+```
+
+### Result
+
+No merge was needed. `2027-1/` is a separate git clone of the professor's repo (`gcastillo56/com111-class`, branch `2027`), independent from this repo's own `origin`. Pulling it landed on the same commit it already had (`4e214e7`), so it was already current. Comparing `2027-1/Class` against `Classwork/Class` file by file found no new labs, no new files, and every diff turned out to be my own solved or in-progress code against the professor's blank starter template, not something to bring in.
+
+Where the check happened: `2027-1/` (professor's clone) vs. [`Classwork/Class/`](Class/) (`async-lab`, `dom-lab`, `js-calculator`, `ux-lab`).
+
+### Notes and manual changes
+
+- **A diff is not automatically "something to merge."** Six files showed differences (`js-calculator/README.md`, `starter.html`, `js/calculator.js`, `dom-lab/index.html`, `css/style.css`, `js/dynamic.js`), but reading each one showed they were all my own answers to the exercises, not professor updates I was missing. Blindly overwriting them with the professor's copy would have deleted finished, already-graded work.
+- **Kept the two repos separate on purpose.** The professor's repo lives in its own clone (`2027-1/`) with its own `origin`, instead of being added as a second remote inside this repo. That keeps his commit history from ever mixing into mine, and a `git pull` there can never touch my working tree.
+- Verified by listing files in both trees first (structure check, no new folders or files), then running `diff` per matching file and reading the actual content of every reported difference before concluding nothing needed to change.
+
+---
