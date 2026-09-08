@@ -1,13 +1,14 @@
-var myGamePiece = new Array();
-var happySrc = "images/smiley.gif";
-var sadSrc = "images/angry.gif";
-var maxDist = 5;
+const myGamePiece = [];
+const happySrc = "images/smiley.gif";
+const sadSrc = "images/angry.gif";
+const maxDist = 5;
 
-var myGameArea = {
+const myGameArea = {
   timer: 0,
   running: true,
   canvas: document.createElement("canvas"),
-  start: function () {
+  // these two stay regular methods because they need their own "this"
+  start() {
     this.canvas.width = 800;
     this.canvas.height = 600;
     this.context = this.canvas.getContext("2d");
@@ -15,11 +16,13 @@ var myGameArea = {
     document.body.insertBefore(this.canvas, document.body.childNodes[0]);
     setInterval(updateGameArea, 20);
   },
-  clear: function () {
+  clear() {
     this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
   },
 };
 
+// it is called with "new", so it can not be an arrow function. The methods
+// inside can, because an arrow takes "this" from the flatlander being built
 function flatlander(width, height, x, y, isHappy) {
   this.image = new Image();
   this.isHappy = isHappy;
@@ -36,65 +39,84 @@ function flatlander(width, height, x, y, isHappy) {
   this.speedY = (Math.random() * 100) % 6;
   this.x = x;
   this.y = y;
-  this.update = function () {
-    ctx = myGameArea.context;
+  this.update = () => {
+    const ctx = myGameArea.context;
     ctx.drawImage(this.image, this.x, this.y, this.width, this.height);
     ctx.fillText(this.happyPoints, this.x, this.y + 5);
   };
-  this.newPos = function (canvasWidth, canvasHeight) {
-    // TODO: Update the x, y position using the this.speedX and this.speedY
-    // values of the object. Make sure that when they reach an edge, they
-    // bounce back.
+  this.newPos = (canvasWidth, canvasHeight) => {
+    this.x += this.speedX;
+    this.y += this.speedY;
+    // flipping the speed at the edges is what makes them bounce back
+    if (this.x >= canvasWidth - this.width || this.x <= 0) {
+      this.speedX = -this.speedX;
+    }
+    if (this.y >= canvasHeight - this.height || this.y <= 0) {
+      this.speedY = -this.speedY;
+    }
   };
-  this.moreHappy = function () {
-    // TODO: increase the happyPoints value and check if the isHappy flag
-    // needs to be updated along with the image being displayed
+  // a sad one needs to climb over 1 before turning happy, and a happy one needs
+  // to fall under 0 before turning sad, so nobody flips on a single contact
+  this.moreHappy = () => {
+    this.happyPoints++;
+    if (!this.isHappy && this.happyPoints > 1) {
+      this.isHappy = true;
+      this.image.src = happySrc;
+    }
   };
-  this.lessHappy = function () {
-    // TODO: decrease the happyPoints value and check if the isHappy flag
-    // needs to be updated along with the image being displayed
+  this.lessHappy = () => {
+    this.happyPoints--;
+    if (this.isHappy && this.happyPoints < 0) {
+      this.isHappy = false;
+      this.image.src = sadSrc;
+    }
   };
-  this.checkSurroundings = function (other) {
-    var x = Math.pow(this.x - other.x, 2);
-    var y = Math.pow(this.y - other.y, 2);
+  this.checkSurroundings = (other) => {
+    const x = Math.pow(this.x - other.x, 2);
+    const y = Math.pow(this.y - other.y, 2);
     return Math.sqrt(x + y);
   };
 }
 
-function startGame() {
-  // TODO: make sure to get all the values from the screen
-  var n = 1;
-  var m = 1;
-  if (parseInt(m) > parseInt(n)) {
+const startGame = () => {
+  const n = parseInt(document.getElementById("num").value);
+  const m = parseInt(document.getElementById("sad").value);
+  // both fields are text, so anything can be typed in there
+  if (isNaN(n) || isNaN(m) || n < 1 || m < 0) {
+    window.alert("Write how many individuals and how many of them are sad.");
+    return;
+  }
+  if (m > n) {
     window.alert("Can not have more sad than individuals.");
     return;
   }
-  var sad = 0;
-  for (i = 0; i < n; i++) {
+  let sad = 0;
+  for (let i = 0; i < n; i++) {
     //var rand = Math.random() * 100;
     // 30% of chance of getting an angry subject
-    var nX = (Math.random() * 10000) % myGameArea.canvas.width;
-    var nY = (Math.random() * 10000) % myGameArea.canvas.height;
-    var gamePiece = new flatlander(30, 30, nX, nY, ++sad > m);
+    const nX = (Math.random() * 10000) % myGameArea.canvas.width;
+    const nY = (Math.random() * 10000) % myGameArea.canvas.height;
+    const gamePiece = new flatlander(30, 30, nX, nY, ++sad > m);
     myGamePiece.push(gamePiece);
   }
   myGameArea.start();
-}
+};
 
-function updateGameArea() {
+const updateGameArea = () => {
+  // let is block scoped, so these two have to be declared out here to survive
+  // past the if below, where the ending message reads them
+  let happy = 0;
+  let sad = 0;
   if (myGameArea.running) {
     myGameArea.clear();
-    for (i = 0; i < myGamePiece.length; i++) {
+    for (let i = 0; i < myGamePiece.length; i++) {
       myGamePiece[i].newPos(myGameArea.canvas.width, myGameArea.canvas.height);
       myGamePiece[i].update();
     }
-    var tmpFocus, d;
-    var happy = 0;
-    var sad = 0;
-    for (i = 0; i < myGamePiece.length; i++) {
-      tmpFocus = myGamePiece[i];
-      for (j = i + 1; j < myGamePiece.length; j++) {
-        d = tmpFocus.checkSurroundings(myGamePiece[j]);
+    for (let i = 0; i < myGamePiece.length; i++) {
+      const tmpFocus = myGamePiece[i];
+      for (let j = i + 1; j < myGamePiece.length; j++) {
+        const d = tmpFocus.checkSurroundings(myGamePiece[j]);
         if (d < maxDist) {
           if (myGamePiece[j].isHappy) {
             tmpFocus.moreHappy();
@@ -114,13 +136,14 @@ function updateGameArea() {
     document.getElementById("sadIndividuals").textContent = "Sad: " + sad;
   } else return;
   if (happy === 0 || sad === 0) {
-    var msg;
     myGameArea.running = false;
-    if (happy == 0) msg = "Absolute sadness.... SAD!";
-    else msg = "Absolute happiness reached.... Hurray!!";
+    const msg =
+      happy == 0
+        ? "Absolute sadness.... SAD!"
+        : "Absolute happiness reached.... Hurray!!";
     document.getElementById("timer").textContent =
       "Time: " + myGameArea.timer + "       " + msg;
   } else {
     document.getElementById("timer").textContent = "Time: " + myGameArea.timer;
   }
-}
+};

@@ -3,27 +3,40 @@
     all Prime Factors (if there are any) and display them.
 */
 
-var getPrimeFactors = function (n) {
-  "use strict";
+const getPrimeFactors = (n) => {
+  const sequence = [];
 
-  function isPrime(n) {
-    var i;
-
-    for (i = 2; i <= Math.sqrt(n); i++) {
-      if (n % i === 0) {
-        return false;
-      }
-    }
-    return true;
+  // taking out every 2 first leaves n odd, so the next loop can jump two by two
+  while (n % 2 === 0) {
+    sequence.push(2);
+    n = n / 2;
   }
 
-  var i,
-    sequence = [];
+  // past the square root of n there can not be another factor pair left
+  for (let i = 3; i <= Math.sqrt(n); i = i + 2) {
+    while (n % i === 0) {
+      sequence.push(i);
+      n = n / i;
+    }
+  }
 
-  //TODO: Check which numbers are factors of n and also check if
-  // that number also happens to be a prime
+  // what is left is a prime bigger than the square root, like the 13 of 30030
+  if (n > 2) {
+    sequence.push(n);
+  }
 
   return sequence;
+};
+
+// reads the number from the page and writes the factors into the pf span
+const showPrimeFactors = () => {
+  const n = parseInt(document.getElementById("num").value);
+  const label = document.getElementById("pf");
+  if (isNaN(n) || n < 2) {
+    label.textContent = "Write a whole number of 2 or more.";
+    return;
+  }
+  label.textContent = getPrimeFactors(n).join(", ");
 };
 
 // the prime factors for this number are: [ 2, 3, 5, 7, 11, 13 ]

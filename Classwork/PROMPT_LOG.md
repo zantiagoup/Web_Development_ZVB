@@ -4,35 +4,15 @@
 **Student:** Zantiago Vargas Beltran
 **Scope:** Individual classwork and exercises in `Classwork/`. The team project log lives in the repo root (`PROMPT_LOG.md`).
 
----
-
-## Rules of AI Engagement (quick reference)
-
-1. **Boilerplate is fine; architecture is yours.** AI may generate layouts, CSS/Bootstrap grids, regex, SQL/Mongoose schemas, or boilerplate fetch functions. Routing, state trees, and integration logic must be understood by us.
-2. **Every prompt gets a human audit.** No blind copy-paste: review, test, refine, and document what we changed.
-3. **Oral defense readiness.** Any AI-generated block can be pointed at during evaluation. We must explain how it works and how it was integrated. This log is the study guide.
+Every entry has four parts: the date, the prompt, what came out of it, and the notes on what I changed by hand afterwards.
 
 ---
 
-## Week 1 Log Entry
+## Portfolio 03 - Personal Website (CSS)
 
-_Exercise: Portfolio 03 - Personal Website (CSS)_
+**Date:** 2026-09-03 · **Tool:** Claude (Claude Code, Opus)
 
-### 1. High-Level Goal
-
-_What feature, component, or bug were you trying to solve this week?_
-
-- Take the finished markup from `Classwork/Portfolio/01-Personal Website (HTML)/index.html` (which is a plain htmlfile) and redesign it as exercise 03 with a single external stylesheet for CSS, following the specs in`README.md`, site palette, use only three font type scale variations, centered layout, dotted `hr` dividers between sections, circular logos containers, alternating section backgrounds for each section, a "meet the team" card layout replacing the heroes table, a dotted-border form, and a static mountain with sticky clouds. Constraint: the content had to stay identical to exercise 01, so every visual decision had to happen in CSS, not by rewriting the pages HTML, simply modify the HTML.
-
-### 2. The Interaction Log
-
-_Document the primary prompts you used to generate the base code._
-
-| AI Tool Used | Exact Initial Prompt | What the AI Generated (Summary/Snippet) |
-| :--- | :--- | :--- |
-| Claude (Claude Code, Opus) | Full prompt transcribed in the block below (too long for this cell) | `css/styles.css` from scratch (210 lines, ~30 rules) plus the minimal markup edits it was allowed to make: `.section` wrappers, the card markup for the heroes section, `alt` attributes, and `id` anchors on `destination.html`. |
-
-**Exact prompt (verbatim):**
+### Prompt
 
 ```text
 We are building "03-Personal Website (CSS)". It is the same site as
@@ -161,48 +141,32 @@ console error, with the real output. Do not tell me it works until you have
 looked at it.
 ```
 
-### 3. The Human Audit & Modifications
 
-_What did the AI get wrong or omit? What manual changes did you make to integrate this code into your existing application structure? (2-3 sentences.)_
+### Result
 
-- **What we changed/added:**
-  - **Section striping was silently dead.** The first pass used `.section:nth-child(even)`, but `nth-child` counts *every* sibling, and the `<hr>` separators and the two cloud `<img>` tags are siblings of the sections. That pushed all seven sections onto odd positions, so not a single one ever got the alternate background, and it looked "fine" because nothing errors. Changed to `:nth-of-type(even)`, which only counts `div` siblings. `css/styles.css:88`.
-  - **The dotted `hr` was invisible.** With `background-color: #FFFFFF` on the body, a `#EAF6F6` rule is basically white on white. Changed the body background to `#B8D8D8` so the required rule color reads. This is why the background is mid-tone and not white.
-  - **Circular logos came out as ellipses.** `border-radius: 50%` on the raw `<img>` bends the element box, and the school logos are 110x25 and 110x35, so they became flat ovals. Rewrote `.logo` as a fixed `100px` square with `object-fit: contain` and a white fill, so the logo is letterboxed inside an actual circle. `css/styles.css:74`.
-  - **List markers were stranded.** With `text-align: center` the bullets and numbers stay pinned at the far left of the list box while the text centers, leaving a column of orphan dots. Added `list-style-position: inside; padding-left: 0`. `css/styles.css:63`.
-  - **Broken image inherited from exercise 01.** `images/me.jpg` is referenced in the hero table but the file does not exist in exercise 01 either, so it 404s. Confirmed with the network log, not assumed. Still open, the photo needs to be added to `images/`.
-  - **Deprecated anchors.** Swapped the five `<a name="kyoto"></a>` style anchors for `id` attributes on the section `div`s. The `destination.html#kyoto` links behave identically, but the page now validates as HTML5 and the accessibility audit stops flagging five empty links with no accessible name.
-  - Verified with a headless Chrome pass over both pages: 32 images, 0 missing `alt`, 1 broken image (`me.jpg`), 1 `h1` per page, no skipped heading levels, no horizontal overflow.
+`css/styles.css` from scratch (210 lines, ~30 rules) plus the minimal markup edits it was allowed to make: `.section` wrappers, the card markup for the heroes section, `alt` attributes, and `id` anchors on `destination.html`.
 
-### 4. Integration & Learnings
+Where the code lives: [`Classwork/Portfolio/03-Personal Website (CSS)/css/styles.css`](Portfolio/03-Personal%20Website%20(CSS)/css/styles.css) lines 1-210 (full file), with the audited fixes at lines 60-65 (list markers), 74-81 (circular logos) and 84-89 (section striping). Markup: `index.html` lines 1-348 and `destination.html` lines 1-119.
 
-_How does this code integrate with the rest of your system? What is the core mechanism you learned?_
+### Notes and manual changes
 
-- **Core Mechanics:** One stylesheet drives both pages because the markup shares the same class vocabulary (`.section`, `.logo`, `.row`/`.column`/`.card`, `.mountain`, `.cloud`), so `destination.html` inherits the whole design without a single rule of its own. The two mechanisms worth defending are (a) `:nth-child` vs `:nth-of-type` -- `nth-child` matches on position among *all* siblings and only then checks the selector, while `nth-of-type` counts only siblings of the same tag, which is what "every even section" actually means when `<hr>`s are interleaved; and (b) `position: sticky`, which behaves like `static` until the element hits its offset threshold inside its containing block and then behaves like `fixed` -- the clouds pin at `top: 0` and stay pinned for the whole document because their containing block is `<body>`, while the mountain stays `static` and scrolls away normally.
-
-- **Where the code lives:** [`Classwork/Portfolio/03-Personal Website (CSS)/css/styles.css`](Portfolio/03-Personal%20Website%20(CSS)/css/styles.css) lines 1-210 (full file), with the audited fixes at lines 60-65 (list markers), 74-81 (circular logos) and 84-89 (section striping). Markup: `index.html` lines 1-348 and `destination.html` lines 1-119.
+- **Section striping was silently dead.** The first pass used `.section:nth-child(even)`, but `nth-child` counts *every* sibling, and the `<hr>` separators and the two cloud `<img>` tags are siblings of the sections. That pushed all seven sections onto odd positions, so not a single one ever got the alternate background, and it looked "fine" because nothing errors. Changed to `:nth-of-type(even)`, which only counts `div` siblings. `css/styles.css:88`.
+- **The dotted `hr` was invisible.** With `background-color: #FFFFFF` on the body, a `#EAF6F6` rule is basically white on white. Changed the body background to `#B8D8D8` so the required rule color reads. This is why the background is mid-tone and not white.
+- **Circular logos came out as ellipses.** `border-radius: 50%` on the raw `<img>` bends the element box, and the school logos are 110x25 and 110x35, so they became flat ovals. Rewrote `.logo` as a fixed `100px` square with `object-fit: contain` and a white fill, so the logo is letterboxed inside an actual circle. `css/styles.css:74`.
+- **List markers were stranded.** With `text-align: center` the bullets and numbers stay pinned at the far left of the list box while the text centers, leaving a column of orphan dots. Added `list-style-position: inside; padding-left: 0`. `css/styles.css:63`.
+- **Broken image inherited from exercise 01.** `images/me.jpg` is referenced in the hero table but the file does not exist in exercise 01 either, so it 404s. Confirmed with the network log, not assumed. Still open, the photo needs to be added to `images/`.
+- **Deprecated anchors.** Swapped the five `<a name="kyoto"></a>` style anchors for `id` attributes on the section `div`s. The `destination.html#kyoto` links behave identically, but the page now validates as HTML5 and the accessibility audit stops flagging five empty links with no accessible name.
+- Verified with a headless Chrome pass over both pages: 32 images, 0 missing `alt`, 1 broken image (`me.jpg`), 1 `h1` per page, no skipped heading levels, no horizontal overflow.
 
 ---
 
-## Week 2 Log Entry
+## Portfolio 03 - Personal Website (CSS), second pass: Apple HIG restyle
 
-_Exercise: Portfolio 03 - Personal Website (CSS), second pass: Apple HIG restyle_
+**Date:** 2026-09-03 · **Tool:** Claude (Claude Code, Opus)
 
-### 1. High-Level Goal
+### Prompt
 
-_What feature, component, or bug were you trying to solve this week?_
-
-- Throw away the visual layer from Week 1 and rebuild it against Apple's Human Interface Guidelines, without touching the exercise's content or section structure. Four rounds of direction: (a) the restyle itself, on a white minimalist palette with Satoshi and gradient display type; (b) swap the heroes for people I actually look up to; (c) replace every image with high-resolution material and change the destinations and cuisines; (d) two polish passes on the hero heading and on removing all border strokes. The interesting constraint throughout was that this is static HTML and CSS only, so every layout change had to be expressible as a selector rather than as new markup.
-
-### 2. The Interaction Log
-
-_Document the primary prompts you used to generate the base code._
-
-| AI Tool Used | Exact Initial Prompt | What the AI Generated (Summary/Snippet) |
-| :--- | :--- | :--- |
-| Claude (Claude Code, Opus) | Four prompts, transcribed in the blocks below | A rewritten `css/styles.css` (~820 lines) built on semantic design tokens; new markup only for the heroes cards and the destinations; 13 CC-licensed images fetched from Wikimedia Commons with attribution recorded in `images/CREDITS.md`. |
-
-**Prompt 1 — the restyle (verbatim):**
+**Prompt 1 — the restyle:**
 
 ```text
 Load your apple-design and HIG skills, then redesign the whole site to meet the
@@ -239,7 +203,7 @@ Specifics I care about:
   fixed; only the styling changes.
 ```
 
-**Prompt 2 — the heroes (verbatim):**
+**Prompt 2 — the heroes:**
 
 ```text
 Change my heroes to: Elon Musk, Sam Altman, Dario Amodei, Steve Jobs. Musk for
@@ -256,7 +220,7 @@ random image off the web. Use their real birth dates; if you cannot verify one,
 write only what you can verify rather than guessing a day and month.
 ```
 
-**Prompt 3 — images and places (verbatim):**
+**Prompt 3 — images and places:**
 
 ```text
 Replace the images everywhere with related, high-quality ones. Also change my
@@ -273,7 +237,7 @@ Delete any image file that nothing references any more, and keep the total page
 weight sane, so downscale anything oversized.
 ```
 
-**Prompt 4 — the two polish passes (verbatim):**
+**Prompt 4 — the two polish passes:**
 
 ```text
 (a) On the title, lower the font weight, and make the gradient softer - only
@@ -282,41 +246,104 @@ weight sane, so downscale anything oversized.
 (b) Remove all border strokes.
 ```
 
-### 3. The Human Audit & Modifications
 
-_What did the AI get wrong or omit? What manual changes did you make to integrate this code into your existing application structure? (2-3 sentences.)_
+### Result
 
-- **What we changed/added:**
-  - **Apple's own grey failed contrast at the size I used it.** `#86868b` is the real tertiary label colour from apple.com, but measured against the `#f5f5f7` section fill it only reaches **3.33:1**, and it was carrying 12px table headers and 15px dates. Darkened to `#707075` (4.52:1 on `#f5f5f7`, 4.93:1 on white). Copying a brand's palette does not copy its context. `css/styles.css:36`.
-  - **A `:where()` fix broke every heading's centring.** To let the form be narrower than the 980px column I wrapped `.section > *` in `:where()`, which drops specificity to zero. That made the plain `h1 { margin: 0 0 24px }` shorthand win and reset `margin-inline` to 0, so every title silently jumped to the left gutter. Caught it by measuring, not by looking: `getBoundingClientRect()` returned `left: 22px, width: 980px` on a 1440px viewport, where a centred column starts at 230px. Fixed by splitting the rule in two, since the two halves need **opposite** specificity: centring must beat the element margins, width must lose to components. `css/styles.css:295`.
-  - **Removing a border is not the same as having no border.** After stripping `border: 1px solid ...` from the inputs, Chrome repainted its own dark inset border, so the form looked worse than before. Needed an explicit `border: none`. Verified afterwards by walking every element's computed style: zero elements paint a border on either page. `css/styles.css:733`.
-  - **Refused to remove the focus outline.** "All border strokes" would literally include the `:focus-visible` ring, but an outline is not a border and it is the only thing telling a keyboard user where they are. Kept it and flagged the decision; removing it would break WCAG 2.4.7. Same reasoning for leaving the checkbox on its native rendering, since with no border and no fill it disappears completely.
-  - **The table needed a replacement for its rules.** Seven rows across eight columns with no separators is unreadable, so the row hairlines became an alternating banded fill with rounded ends, which separates without a stroke.
-  - **Guessed Wikidata IDs and got five wrong entities.** Looked up the places by hand-written QID and got Ferrara, Mount Athos and the Acropolis back. Rewrote the lookup to resolve the Wikipedia article title to its wikibase item instead, which is unambiguous, and got the real figures.
-  - **Verified every image licence before downloading.** All 13 are CC0 / CC BY / CC BY-SA or public domain from Wikimedia Commons, attributed in `images/CREDITS.md` as those licences require. Recompressed the set from 10.9MB to 3.5MB and deleted 15 files nothing referenced.
-  - **Still open:** `images/me.jpg` is referenced by `index.html` and does not exist. It was missing in exercise 01 too. It is the only 404 left.
+A rewritten `css/styles.css` (~820 lines) built on semantic design tokens; new markup only for the heroes cards and the destinations; 13 CC-licensed images fetched from Wikimedia Commons with attribution recorded in `images/CREDITS.md`.
 
-### 4. Integration & Learnings
+Where the code lives: [`Classwork/Portfolio/03-Personal Website (CSS)/css/styles.css`](Portfolio/03-Personal%20Website%20(CSS)/css/styles.css), 888 lines. Audited spots: the tokens and the contrast fix at 21-86 (tertiary label at line 36), the split h1/h2 gradients at 175-207, the specificity split at 281-300, the banded schedule table at 619-670, the borderless form fields at 719-745. Markup: `index.html` lines 1-347 (heroes cards at 155-201) and `destination.html` lines 1-121 (five destinations at 23-100). Attribution: `images/CREDITS.md`. Commits `fc0bf75`, `3abb558`, `c3b5e59`.
 
-_How does this code integrate with the rest of your system? What is the core mechanism you learned?_
+### Notes and manual changes
 
-- **Core Mechanics:** The whole restyle is one stylesheet over unchanged markup, which was only possible because of `:has()`. Education rows are selected with `li:has(> a > .logo)` and hobby cards with `li:has(> img)`, so plain `<li>` elements become cards with no extra classes; `table:not(:has(th))` flattens the profile table into a stack while `table:has(th)` keeps the schedule tabular. The other mechanism worth defending is **specificity as a design tool**: `.section > *` (0,1,0) and `:where(.section) > *` (0,0,0) select exactly the same elements, and splitting the declarations between them is what lets one rule win against element selectors while the other loses to them. That is not a trick, it is the whole reason `:where()` exists. Third, **borderless separation**: without strokes, a surface is only visible if it differs from its parent in fill or in shadow, which is why the same card needs a shadow in light mode (white on white) and needs none in dark mode (`#1d1d1f` on black already separates).
-
-- **Where the code lives:** [`Classwork/Portfolio/03-Personal Website (CSS)/css/styles.css`](Portfolio/03-Personal%20Website%20(CSS)/css/styles.css), 888 lines. Audited spots: the tokens and the contrast fix at 21-86 (tertiary label at line 36), the split h1/h2 gradients at 175-207, the specificity split at 281-300, the banded schedule table at 619-670, the borderless form fields at 719-745. Markup: `index.html` lines 1-347 (heroes cards at 155-201) and `destination.html` lines 1-121 (five destinations at 23-100). Attribution: `images/CREDITS.md`. Commits `fc0bf75`, `3abb558`, `c3b5e59`.
+- **Apple's own grey failed contrast at the size I used it.** `#86868b` is the real tertiary label colour from apple.com, but measured against the `#f5f5f7` section fill it only reaches **3.33:1**, and it was carrying 12px table headers and 15px dates. Darkened to `#707075` (4.52:1 on `#f5f5f7`, 4.93:1 on white). Copying a brand's palette does not copy its context. `css/styles.css:36`.
+- **A `:where()` fix broke every heading's centring.** To let the form be narrower than the 980px column I wrapped `.section > *` in `:where()`, which drops specificity to zero. That made the plain `h1 { margin: 0 0 24px }` shorthand win and reset `margin-inline` to 0, so every title silently jumped to the left gutter. Caught it by measuring, not by looking: `getBoundingClientRect()` returned `left: 22px, width: 980px` on a 1440px viewport, where a centred column starts at 230px. Fixed by splitting the rule in two, since the two halves need **opposite** specificity: centring must beat the element margins, width must lose to components. `css/styles.css:295`.
+- **Removing a border is not the same as having no border.** After stripping `border: 1px solid ...` from the inputs, Chrome repainted its own dark inset border, so the form looked worse than before. Needed an explicit `border: none`. Verified afterwards by walking every element's computed style: zero elements paint a border on either page. `css/styles.css:733`.
+- **Refused to remove the focus outline.** "All border strokes" would literally include the `:focus-visible` ring, but an outline is not a border and it is the only thing telling a keyboard user where they are. Kept it and flagged the decision; removing it would break WCAG 2.4.7. Same reasoning for leaving the checkbox on its native rendering, since with no border and no fill it disappears completely.
+- **The table needed a replacement for its rules.** Seven rows across eight columns with no separators is unreadable, so the row hairlines became an alternating banded fill with rounded ends, which separates without a stroke.
+- **Guessed Wikidata IDs and got five wrong entities.** Looked up the places by hand-written QID and got Ferrara, Mount Athos and the Acropolis back. Rewrote the lookup to resolve the Wikipedia article title to its wikibase item instead, which is unambiguous, and got the real figures.
+- **Verified every image licence before downloading.** All 13 are CC0 / CC BY / CC BY-SA or public domain from Wikimedia Commons, attributed in `images/CREDITS.md` as those licences require. Recompressed the set from 10.9MB to 3.5MB and deleted 15 files nothing referenced.
+- **Still open:** `images/me.jpg` is referenced by `index.html` and does not exist. It was missing in exercise 01 too. It is the only 404 left.
 
 ---
 
-## Reference: what a good entry looks like
+## Portfolio 05 - JS Exercises, Society parody
 
-**Exemplary (Prompt Alchemist standard)**
+**Date:** 2026-09-08 · **Tool:** Claude (Claude Code, Opus)
 
-- **Goal:** Build an Express endpoint to authenticate a user using JWT.
-- **Prompt:** "Show me how to write an Express POST route for `/api/login` that verifies a user's hashed password against a MongoDB document using mongoose, and returns a signed JWT if successful."
-- **Audit:** The AI used a generic `User.findOne`; we swapped it for our `UserModel` service. It hardcoded the signing secret (`jwt.sign(payload, 'secret')`), so we replaced it with `process.env.JWT_SECRET` to keep secrets out of GitHub. We also added an error handler for database timeouts so the server does not crash on a bad DB state.
-- **Learnings:** The route returns a signed JWT the client must send in the `Authorization` header for protected routes. We learned `bcrypt.compare` runs asynchronously to avoid timing attacks.
+### Prompt
 
-**Unacceptable (fails the ethical AI boundary)**
+```text
+In js/society.js there are 4 TODOs. Fill those in and nothing else. Do not
+add files, do not add functions, do not use any new fancy JS. Write it the
+same old way the file is already written, with var and function. Here is
+what each one has to do.
 
-- **Goal:** Connect my server to MongoDB.
-- **Prompt:** "Write my database connection code."
-- **Audit:** "We pasted it into our server and it connected." No analysis, no customization, no error handling, high risk of failing the oral defense.
+1) this.newPos(canvasWidth, canvasHeight)
+   Every little person has a spot on the screen (this.x, this.y) and a
+   walking speed (this.speedX, this.speedY). To make it walk, add the speed
+   to the spot, once per frame:
+       x = x + speedX
+       y = y + speedY
+   To make it bounce, think of a ball hitting a wall. The ball does not
+   stop, it comes back with the same force, only the other way. So the only
+   thing you change is the sign of the speed: speedX = -speedX. Do that
+   when it touches the left or the right wall, and do the same with speedY
+   when it touches the top or the bottom.
+   Be careful about where the walls are. The x and y of a picture is its
+   top left corner, not its middle. So the right wall is the width of the
+   canvas minus the width of the picture, and the bottom wall is the height
+   of the canvas minus the height of the picture. If you forget that, half
+   the face hangs out of the screen.
+
+2) this.moreHappy() and this.lessHappy()
+   Every little person carries a number (this.happyPoints), a yes or no for
+   whether it is happy right now (this.isHappy), and the face it shows,
+   which is either smiley.gif or angry.gif.
+   moreHappy adds 1 to the number. lessHappy takes 1 away.
+   The face does not change every time the number changes. A happy person
+   does not turn sad over one bad day. So:
+       - a sad one turns happy only when its number goes above 1
+       - a happy one turns sad only when its number goes below 0
+   They start at 1 if they are happy and at -1 if they are sad, so a sad
+   one needs 3 good meetings to turn around and a happy one needs 2 bad
+   ones. That space in the middle is on purpose. It is what makes the
+   simulation take a while instead of the faces blinking back and forth.
+   When one does turn around, change its picture too: point this.image.src
+   at happySrc or at sadSrc, which are already written at the top of the
+   file. Do not make a new picture, reuse the one that person already has.
+
+3) startGame()
+   Right now it says "var n = 1; var m = 1;". n is how many people there
+   are and m is how many of them start sad. Take those two numbers from the
+   boxes on the page instead. The boxes are id="num" and id="sad" in
+   society.html.
+   Whatever someone types in a box arrives as text, even when it looks like
+   a number, so turn it into a real number first with parseInt.
+   Leave the rest of the function alone. The warning about having more sad
+   people than people, and the loop that creates them, are already fine.
+   One thing to cover: if someone types letters instead of a number, there
+   is nothing to count, so nobody gets created, the screen stays empty, and
+   the simulation announces "Absolute sadness" over an empty world. Catch
+   that before it happens and show a window.alert, the same kind that is
+   already in there.
+
+Do not touch updateGameArea, checkSurroundings, the myGameArea part or the
+HTML. Only write a comment where the line does not explain itself.
+```
+
+
+### Result
+
+The four TODO blocks of `js/society.js` filled in, about 30 lines of JS. No new files, no new functions, no libraries.
+
+Where the code lives: [`Classwork/Portfolio/05-JS/js/society.js`](Portfolio/05-JS/js/society.js) lines 47-73 (`newPos`, `moreHappy`, `lessHappy`) and 81-89 (`startGame` reading the form). The untouched professor code is `flatlander` at 26-46, `checkSurroundings` at 74-78 and `updateGameArea` at 105-149. Markup: `society.html`. Commit `13ed9e8`.
+
+### Notes and manual changes
+
+- **It added a clamp nobody asked for.** The first pass wrapped the bounce in `this.x = Math.min(Math.max(this.x, 0), canvasWidth - this.width)` to pin the flatlander back onto the edge before flipping the speed. It is not wrong, but the TODO says "bounce back" and flipping the sign already does that; the speeds here are fixed between 0 and 6, so nothing ever overshoots enough to be visible. Deleted, `js/society.js:47`. It stayed in `js/images.js` instead, because there the speed grows by 1 on every button press and the README for that exercise does demand the image never leaves the viewport.
+- **The thresholds only work because the point moves first.** `this.happyPoints++` has to run before the `if`, otherwise a sad one sitting at exactly 1 never crosses "over 1" and the society freezes with nobody flipping. Checked it by running the simulation with 20 individuals and 3 sad and watching a sad face at `0` climb to `2` and turn into a smiley.
+- **One-way influence, and it is the professor's loop, not ours.** `updateGameArea` pairs everyone with `for (i...)` and `for (j = i + 1...)`, but only ever calls `tmpFocus.moreHappy()`, so in a contact between `i` and `j` only `i` changes. `j` feels nothing. That is why the society drifts happy: the sad ones are created last, so they spend most of their time in the `j` position where their opinion does not count. Left as is because the exercise says not to touch that function, but it is the first thing to point at if someone asks why 3 sad people never win.
+- **The picture swap is a `src` reassignment, not a new object.** Each flatlander holds one `Image` from its constructor; setting `.src` reloads that same object. The second load is instant because the GIF is already in the browser cache, so there is no flicker when a face flips.
+- Verified in headless Chrome with 20 individuals and 3 sad: all 20 stay inside the 800x600 canvas after 5 seconds (~370 frames), the counters read `Happy: 18 / Sad: 2`, and a sad face did flip to happy during the run.
+
+---
